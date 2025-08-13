@@ -1,0 +1,70 @@
+{% extends "admin/admin_layout.html" %}
+
+{% block title %}View User{% endblock %}
+{% block page_title %}Viewing Profile for: {{ user.name }}{% endblock %}
+
+{% block content %}
+<div class="profile-grid">
+    <div class="profile-details-card">
+        <h2>User Details</h2>
+        <div class="detail-item">
+            <strong>User ID:</strong>
+            <span>{{ user.id }}</span>
+        </div>
+        <div class="detail-item">
+            <strong>Name:</strong>
+            <span>{{ user.name }}</span>
+        </div>
+        <div class="detail-item">
+            <strong>Email:</strong>
+            <span>{{ user.email }}</span>
+        </div>
+        <div class="detail-item">
+            <strong>Phone:</strong>
+            <span>{{ user.phone_number or 'Not Provided' }}</span>
+        </div>
+        <div class="detail-item">
+            <strong>Admin Status:</strong>
+            <span>{% if user.is_admin %}Yes{% else %}No{% endif %}</span>
+        </div>
+        <div class="detail-item">
+            <strong>Member Since:</strong>
+            <span>{{ user.created_at.strftime('%B %d, %Y') }}</span>
+        </div>
+    </div>
+
+    <div class="appointment-history-card">
+        <h2>Appointment History ({{ appointments|length }})</h2>
+        <div class="log-table-container">
+            <table class="log-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Vehicle</th>
+                        <th>Service</th>
+                        <th>Scheduled For</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for appt in appointments %}
+                    <tr>
+                        <td>{{ appt.id }}</td>
+                        <td>{{ appt.vehicle_year }} {{ appt.vehicle_make }} {{ appt.vehicle_model }}</td>
+                        <td>{{ appt.service_required }}</td>
+                        <td>{{ appt.preferred_date.strftime('%Y-%m-%d') }}</td>
+                        <td>
+                            <span class="status-badge status-{{ appt.status.lower() }}">{{ appt.status }}</span>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5">This user has no appointment history.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

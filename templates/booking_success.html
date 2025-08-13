@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+{% block title %}Appointment Requested{% endblock %}
+
+{% block content %}
+    <div class="success-container">
+        <div class="success-icon">✅</div>
+        <h1>Thank You!</h1>
+        <p>Your appointment request has been successfully submitted.</p>
+        <p>We will review your request and contact you shortly to confirm the final date and time.</p>
+        <a href="{{ url_for('welcome') }}" class="cta-button">Back to Home</a>
+    </div>
+{% endblock %}

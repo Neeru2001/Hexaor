@@ -1,0 +1,77 @@
+{% extends "layout.html" %}
+
+{% block title %}Book an Appointment{% endblock %}
+
+{% block content %}
+    <h1>Book a Service Appointment</h1>
+    <p>Please fill out the form below to request an appointment. We will contact you to confirm the date and time.</p>
+    <hr>
+
+    <form method="POST" action="{{ url_for('book_appointment') }}">
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="vehicle_make">Vehicle Make</label>
+                <input type="text" id="vehicle_make" name="vehicle_make" placeholder="e.g., Toyota" value="{{ form_data.vehicle_make if form_data }}" required minlength="2" maxlength="50" class="{{ 'is-invalid' if errors.vehicle_make }}">
+                {% if errors.vehicle_make %}<div class="invalid-feedback">{{ errors.vehicle_make }}</div>{% endif %}
+            </div>
+            <div class="form-group">
+                <label for="vehicle_model">Vehicle Model</label>
+                <input type="text" id="vehicle_model" name="vehicle_model" placeholder="e.g., Camry" value="{{ form_data.vehicle_model if form_data }}" required minlength="1" maxlength="50" class="{{ 'is-invalid' if errors.vehicle_model }}">
+                {% if errors.vehicle_model %}<div class="invalid-feedback">{{ errors.vehicle_model }}</div>{% endif %}
+            </div>
+            <div class="form-group">
+                <label for="vehicle_year">Vehicle Year</label>
+                <input type="number" id="vehicle_year" name="vehicle_year" placeholder="e.g., 2020" min="1950" max="2025" value="{{ form_data.vehicle_year if form_data }}" required class="{{ 'is-invalid' if errors.vehicle_year }}">
+                {% if errors.vehicle_year %}<div class="invalid-feedback">{{ errors.vehicle_year }}</div>{% endif %}
+            </div>
+            <div class="form-group">
+                <label for="service_required">Service Required</label>
+                <select id="service_required" name="service_required" required class="{{ 'is-invalid' if errors.service_required }}">
+                    <option value="" disabled selected>-- Select a Service --</option>
+                    <option value="Engine Diagnostics" {% if form_data and form_data.service_required == 'Engine Diagnostics' %}selected{% endif %}>Engine Diagnostics</option>
+                    <option value="Oil & Filter Change" {% if form_data and form_data.service_required == 'Oil & Filter Change' %}selected{% endif %}>Oil & Filter Change</option>
+                    <option value="Brake Repair" {% if form_data and form_data.service_required == 'Brake Repair' %}selected{% endif %}>Brake Repair</option>
+                    <option value="Tire Services" {% if form_data and form_data.service_required == 'Tire Services' %}selected{% endif %}>Tire Services</option>
+                    <option value="General Inspection" {% if form_data and form_data.service_required == 'General Inspection' %}selected{% endif %}>General Inspection</option>
+                    <option value="Other" {% if form_data and form_data.service_required == 'Other' %}selected{% endif %}>Other (describe below)</option>
+                </select>
+                {% if errors.service_required %}<div class="invalid-feedback">{{ errors.service_required }}</div>{% endif %}
+            </div>
+            <div class="form-group">
+                <label for="phone_number">Phone Number</label>
+                <input type="tel" id="phone_number" name="phone_number" placeholder="e.g., 555-123-4567" value="{{ form_data.phone_number if form_data }}" required pattern="[0-9]{3}-?[0-9]{3}-?[0-9]{4}" title="Enter a 10-digit phone number, with or without hyphens (e.g., 555-123-4567)." class="{{ 'is-invalid' if errors.phone_number }}">
+                {% if errors.phone_number %}<div class="invalid-feedback">{{ errors.phone_number }}</div>{% endif %}
+            </div>
+            <div class="form-group">
+                <label for="preferred_date">Preferred Date</label>
+                <input type="date" id="preferred_date" name="preferred_date" value="{{ form_data.preferred_date if form_data }}" required class="{{ 'is-invalid' if errors.preferred_date }}">
+                {% if errors.preferred_date %}<div class="invalid-feedback">{{ errors.preferred_date }}</div>{% endif %}
+            </div>
+            <div class="form-group">
+                <label for="preferred_time">Preferred Time</label>
+                <select id="preferred_time" name="preferred_time" required class="{{ 'is-invalid' if errors.preferred_time }}">
+                    <option value="Morning (8am - 12pm)" {% if form_data and form_data.preferred_time == 'Morning (8am - 12pm)' %}selected{% endif %}>Morning (8am - 12pm)</option>
+                    <option value="Afternoon (1pm - 5pm)" {% if form_data and form_data.preferred_time == 'Afternoon (1pm - 5pm)' %}selected{% endif %}>Afternoon (1pm - 5pm)</option>
+                </select>
+                {% if errors.preferred_time %}<div class="invalid-feedback">{{ errors.preferred_time }}</div>{% endif %}
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="additional_notes">Additional Notes or Concerns</label>
+            <textarea id="additional_notes" name="additional_notes" rows="4" placeholder="e.g., 'I hear a strange noise when turning right.'">{{ form_data.additional_notes if form_data }}</textarea>
+        </div>
+        <button type="submit">Request Appointment</button>
+    </form>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Set the minimum date for the date picker to today to prevent past date selection.
+    // This provides a better user experience than a server-side error.
+    const datePicker = document.getElementById('preferred_date');
+    if (datePicker) {
+        const today = new Date().toISOString().split('T')[0];
+        datePicker.min = today;
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{% block title %}Newsletter{% endblock %}
+
+{% block content %}
+    <h1>Subscribe to Our Newsletter</h1>
+    <p>Stay up-to-date with our latest news, offers, and vehicle maintenance tips by subscribing to our monthly newsletter.</p>
+    <hr>
+
+    {# Display flashed messages #}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="flash-message {{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('newsletter') }}">
+        <div class="form-group">
+            <label for="newsletter-email">Your Email</label>
+            <input type="email" id="newsletter-email" name="email" value="{{ user_email or '' }}" placeholder="you@example.com" required>
+        </div>
+        <button type="submit">Subscribe</button>
+    </form>
+{% endblock %}

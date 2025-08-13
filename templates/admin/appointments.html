@@ -1,0 +1,64 @@
+{% extends "admin/admin_layout.html" %}
+
+{% block title %}Manage Appointments{% endblock %}
+{% block page_title %}Appointment Requests{% endblock %}
+
+{% block content %}
+<div class="log-table-container">
+    <table class="log-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Requested On</th>
+                <th>Customer</th>
+                <th>Vehicle</th>
+                <th>Service</th>
+                <th>Preferred Date</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for appt in appointments %}
+            <tr class="status-{{ appt.status.lower() }}">
+                <td>{{ appt.id }}</td>
+                <td>{{ appt.created_at.strftime('%Y-%m-%d') }}</td>
+                <td>
+                    <strong>{{ appt.user_name }}</strong><br>
+                    <small>{{ appt.user_email }}</small>
+                    <small><br><strong>Tel:</strong> {{ appt.phone_number or 'N/A' }}</small>
+                </td>
+                <td>{{ appt.vehicle_year }} {{ appt.vehicle_make }} {{ appt.vehicle_model }}</td>
+                <td>{{ appt.service_required }}</td>
+                <td>{{ appt.preferred_date.strftime('%Y-%m-%d') }} at {{ appt.preferred_time }}</td>
+                <td>
+                    <span class="status-badge status-{{ appt.status.lower() }}">{{ appt.status }}</span>
+                </td>
+                <td>
+                    <form class="appointment-update-form" method="POST" action="{{ url_for('admin_update_appointment', appointment_id=appt.id) }}">
+                        <div class="form-group-inline">
+                            <input type="date" name="preferred_date" value="{{ appt.preferred_date.strftime('%Y-%m-%d') }}" title="Change Appointment Date">
+                            <select name="preferred_time" title="Change Appointment Time">
+                                <option value="Morning (8am - 12pm)" {% if appt.preferred_time == 'Morning (8am - 12pm)' %}selected{% endif %}>Morning</option>
+                                <option value="Afternoon (1pm - 5pm)" {% if appt.preferred_time == 'Afternoon (1pm - 5pm)' %}selected{% endif %}>Afternoon</option>
+                            </select>
+                            <select name="status" title="Change Appointment Status">
+                                <option value="Pending" {% if appt.status == 'Pending' %}selected{% endif %}>Pending</option>
+                                <option value="Confirmed" {% if appt.status == 'Confirmed' %}selected{% endif %}>Confirmed</option>
+                                <option value="Completed" {% if appt.status == 'Completed' %}selected{% endif %}>Completed</option>
+                                <option value="Cancelled" {% if appt.status == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+                            </select>
+                            <button type="submit" class="cta-button-small" title="Save Changes">Save</button>
+                        </div>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="8">No appointment requests found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

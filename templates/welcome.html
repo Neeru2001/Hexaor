@@ -1,0 +1,149 @@
+{% extends "layout.html" %}
+
+{% block title %}Home - Vehicle Repair{% endblock %}
+
+{% block content %}
+<style>
+    /* Animation for sections fading in on scroll */
+    .fade-in-section {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    }
+    .fade-in-section.is-visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* Interactive hover effect for cards */
+    .service-card, .feature-card, .testimonial-card {
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+    .service-card:hover, .feature-card:hover, .testimonial-card:hover {
+        transform: translateY(-10px); /* Lifts the card up */
+        box-shadow: 0 15px 30px rgba(0,0,0,0.1); /* Adds a subtle shadow */
+    }
+
+    /* Animation for hero section text */
+    .hero-content h1, .hero-content p, .hero-content .cta-button {
+        /* Start hidden and ready for animation */
+        opacity: 0;
+        transform: translateY(20px);
+        /* Define animation properties */
+        animation: slideInUp 0.7s ease-out forwards;
+    }
+
+    /* Stagger the animation delays for a sequential effect */
+    .hero-content p {
+        animation-delay: 0.2s;
+    }
+    .hero-content .cta-button {
+        animation-delay: 0.4s;
+    }
+
+    @keyframes slideInUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
+
+    <div class="hero-section">
+        <div class="hero-content">
+            <h1>Expert Vehicle Repair &amp; Maintenance</h1>
+            <p>Your trusted partner for keeping your car in top condition.</p>
+            <a href="{{ url_for('book_appointment') }}" class="cta-button">Book an Appointment</a>
+        </div>
+    </div>
+
+    <div class="services-section fade-in-section">
+        <div class="content-container">
+            <h2>Our Services</h2>
+            <p class="services-intro">From routine maintenance to complex repairs, we've got you covered. Our certified technicians are here to help.</p>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">🔧</div>
+                    <h3>Engine Diagnostics</h3>
+                    <p>Using the latest technology to find and fix issues quickly and accurately.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🛢️</div>
+                    <h3>Oil & Filter Change</h3>
+                    <p>Keep your engine running smoothly with our premium oil change services.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">⚙️</div>
+                    <h3>Brake Repair</h3>
+                    <p>Ensuring your safety with expert brake inspection, service, and repair.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🚗</div>
+                    <h3>Tire Services</h3>
+                    <p>We offer tire rotation, balancing, and replacement to maximize your ride's comfort.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="why-choose-us-section fade-in-section">
+        <div class="content-container">
+            <h2>Why Choose Us?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">✅</div>
+                    <h3>Certified Technicians</h3>
+                    <p>Our team is composed of highly skilled and certified professionals dedicated to quality.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💰</div>
+                    <h3>Transparent Pricing</h3>
+                    <p>No hidden fees. We provide clear, upfront estimates for all our work before we begin.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⏱️</div>
+                    <h3>Fast & Reliable Service</h3>
+                    <p>We understand your time is valuable and work efficiently to get you back on the road.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="gallery-section fade-in-section">
+        <div class="content-container">
+            <h2>Our Workshop in Action</h2>
+        </div>
+        <div class="slider-container">
+            <div class="slides">
+                <div class="slide" style="--bg-image: url('{{ url_for('static', filename='gallery-1.jpg') }}');"></div>
+                <div class="slide" style="--bg-image: url('{{ url_for('static', filename='gallery-2.jpg') }}');"></div>
+                <div class="slide" style="--bg-image: url('{{ url_for('static', filename='gallery-3.jpg') }}');"></div>
+                <div class="slide" style="--bg-image: url('{{ url_for('static', filename='gallery-4.jpg') }}');"></div>
+                <div class="slide" style="--bg-image: url('{{ url_for('static', filename='gallery-5.jpg') }}');"></div>
+                <div class="slide" style="--bg-image: url('{{ url_for('static', filename='gallery-6.jpg') }}');"></div>
+                <div class="slide" style="--bg-image: url('{{ url_for('static', filename='gallery-7.jpg') }}');"></div>
+            </div>
+            <button class="slider-btn prev-btn" title="Previous">&lt;</button>
+            <button class="slider-btn next-btn" title="Next">&gt;</button>
+        </div>
+    </div>
+
+    <div class="testimonials-section fade-in-section">
+        <div class="content-container">
+            <h2>What Our Customers Say</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <blockquote>"Incredible service from start to finish. My car runs like new! Highly recommend this shop to anyone."</blockquote>
+                    <cite>&mdash; Rahul D.</cite>
+                </div>
+                <div class="testimonial-card">
+                    <blockquote>"The most honest and reliable mechanics I've ever met. They explained everything clearly and the price was fair."</blockquote>
+                    <cite>&mdash; Arya S.</cite>
+                </div>
+            </div>
+            <div class="more-testimonials-link">
+                <a href="{{ url_for('testimonials') }}">Read more...</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,90 @@
+{% extends "layout.html" %}
+
+{% block title %}Your Profile{% endblock %}
+
+{% block content %}
+    <h1>Your Profile</h1>
+    <p>View and update your account details and see your appointment history below.</p>
+    <hr>
+
+    {# Display flashed messages from form submissions #}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="flash-message {{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div class="profile-grid">
+        <div class="profile-details-card">
+            <h2>Profile Details</h2>
+            {% if user %}
+            <form action="{{ url_for('update_profile') }}" method="POST" class="profile-form">
+                <div class="form-group">
+                    <label for="profile-name">Name</label>
+                    <input type="text" id="profile-name" name="name" value="{{ user.name }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="profile-email">Email</label>
+                    <input type="email" id="profile-email" name="email" value="{{ user.email }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="profile-phone">Phone Number (Optional)</label>
+                    <input type="tel" id="profile-phone" name="phone_number" value="{{ user.phone_number or '' }}" placeholder="e.g., 555-123-4567">
+                </div>
+                <div class="form-group">
+                    <label>Member Since</label>
+                    <input type="text" value="{{ user.created_at.strftime('%B %d, %Y') }}" readonly class="readonly-field">
+                </div>
+                <button type="submit" class="cta-button">Update Profile</button>
+            </form>
+            {% else %}
+            <p>Could not load user details.</p>
+            {% endif %}
+        </div>
+
+        <div class="appointment-history-card">
+            <h2>Appointment History</h2>
+            <div class="appointments-list">
+                {% for appt in appointments %}
+                <div class="appointment-item status-{{ appt.status.lower() }}">
+                    <div class="appointment-header">
+                        <span class="appointment-vehicle">{{ appt.vehicle_year }} {{ appt.vehicle_make }} {{ appt.vehicle_model }}</span>
+                        <span class="status-badge status-{{ appt.status.lower() }}">{{ appt.status }}</span>
+                    </div>
+                    <div class="appointment-body">
+                        <p><strong>Service:</strong> {{ appt.service_required }}</p>
+                        <p><strong>Requested On:</strong> {{ appt.created_at.strftime('%Y-%m-%d') }}</p>
+                        <p><strong>Scheduled For:</strong> {{ appt.preferred_date.strftime('%Y-%m-%d') }} ({{ appt.preferred_time }})</p>
+                    </div>
+                </div>
+                {% else %}
+                <div class="no-appointments">
+                    <p>You have not booked any appointments yet.</p>
+                    <a href="{{ url_for('book_appointment') }}" class="cta-button">Book Your First Appointment</a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="password-change-card">
+        <h2>Change Password</h2>
+        <form action="{{ url_for('change_password') }}" method="POST" class="profile-form">
+            <div class="form-group">
+                <label for="current_password">Current Password</label>
+                <input type="password" id="current_password" name="current_password" required>
+            </div>
+            <div class="form-group">
+                <label for="new_password">New Password (min. 8 characters)</label>
+                <input type="password" id="new_password" name="new_password" required minlength="8">
+            </div>
+            <div class="form-group">
+                <label for="confirm_password">Confirm New Password</label>
+                <input type="password" id="confirm_password" name="confirm_password" required>
+            </div>
+            <button type="submit" class="cta-button">Change Password</button>
+        </form>
+    </div>
+{% endblock %}

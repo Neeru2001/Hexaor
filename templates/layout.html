@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}My App{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@700&display=swap" rel="stylesheet">
+    <!-- Link to the external stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        /* Styles for the header changing on scroll */
+        .site-header {
+            transition: all 0.4s ease-in-out; /* Smooth transition for all properties */
+        }
+        .site-header.scrolled {
+            background-color: rgba(23, 32, 42, 0.95); /* A dark, slightly transparent background */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body class="app-layout">
+
+<header class="site-header">
+    <nav>
+        <div class="logo-area">
+            <a href="{{ url_for('welcome') }}"><img src="{{ url_for('static', filename='logo.png') }}" alt="Company Logo" class="logo"></a>
+            <span class="site-title">Hexaor</span>
+        </div>
+        <button class="menu-toggle" aria-label="Toggle navigation" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+        <ul class="nav-links">
+            <li class="{{ 'active' if active_page == 'home' else '' }}"><a href="{{ url_for('welcome') }}">Home</a></li>
+            <li class="{{ 'active' if active_page == 'profile' else '' }}"><a href="{{ url_for('profile') }}">Profile</a></li>
+            <li class="{{ 'active' if active_page == 'services' else '' }}"><a href="{{ url_for('services') }}">Services</a></li>
+            <li class="{{ 'active' if active_page == 'faq' else '' }}"><a href="{{ url_for('faq') }}">FAQ</a></li>
+            <li class="{{ 'active' if active_page == 'testimonials' else '' }}"><a href="{{ url_for('testimonials') }}">Testimonials</a></li>
+            {% if session.is_admin %}
+            <li class="admin-link"><a href="{{ url_for('admin_dashboard') }}">Admin</a></li>
+            {% endif %}
+            <li class="logout-link"><a href="{{ url_for('logout') }}">Logout</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main class="main-content{% if active_page == 'home' %} home-page-content{% endif %}">
+    {% block content %}{% endblock %}
+</main>
+
+<footer class="site-footer-main">
+    <div class="footer-container">
+        <div class="footer-column">
+            <h4>Navigate</h4>
+            <ul>
+                <li><a href="{{ url_for('welcome') }}">Home</a></li>
+                <li><a href="{{ url_for('profile') }}">Profile</a></li>
+                <li><a href="{{ url_for('services') }}">Services</a></li>
+                <li><a href="{{ url_for('faq') }}">FAQ</a></li>
+                <li><a href="{{ url_for('testimonials') }}">Testimonials</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h4>Contact Us</h4>
+            <p>
+                123 Innovation Drive<br>
+                Tech City, TX 12345<br>
+                USA
+            </p>
+        </div>
+        <div class="footer-column">
+            <h4>Opening Hours</h4>
+            <p>
+                Monday - Friday: 8:00 AM - 6:00 PM<br>
+                Saturday: 9:00 AM - 4:00 PM<br>
+                Sunday: Closed
+            </p>
+        </div>
+        <div class="footer-column">
+            <h4>Connect</h4>
+            <ul>
+                <li><a href="{{ url_for('newsletter') }}">Newsletter</a></li>
+                <li><a href="{{ url_for('contact') }}">Contact</a></li>
+                <li><a href="{{ url_for('career') }}">Careers</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2024 My App. All Rights Reserved.</p>
+    </div>
+</footer>
+
+<button id="scrollToTopBtn" class="scroll-to-top-btn" title="Go to top">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+</button>
+
+<script>
+    // Scroll to top button logic
+    const scrollToTopBtn = document.getElementById("scrollToTopBtn");
+
+    // Show button when user scrolls down 300px
+    window.onscroll = function() {
+        if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+            scrollToTopBtn.classList.add("show");
+        } else {
+            scrollToTopBtn.classList.remove("show");
+        }
+    };
+
+    // Smoothly scroll to top on click
+    scrollToTopBtn.addEventListener("click", function() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+
+    // Mobile Menu Toggle
+    const menuToggle = document.querySelector('.menu-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    menuToggle.addEventListener('click', () => {
+        const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
+        menuToggle.setAttribute('aria-expanded', !isExpanded);
+        navLinks.classList.toggle('nav-active');
+    });
+
+    // Image Slider Logic (only runs if slider exists on the page)
+    const sliderContainer = document.querySelector('.slider-container');
+    if (sliderContainer) {
+        const slides = document.querySelector('.slides');
+        const allSlides = document.querySelectorAll('.slide');
+        const slideCount = allSlides.length;
+        const prevBtn = document.querySelector('.prev-btn');
+        const nextBtn = document.querySelector('.next-btn');
+        let currentIndex = 0;
+        const visibleSlides = 4;
+        const slideWidthPercentage = 100 / visibleSlides;
+
+        function showSlide(index) {
+            // The maximum index we can slide to
+            const maxIndex = slideCount - visibleSlides;
+
+            // Loop around if index is out of bounds
+            if (index > maxIndex) {
+                currentIndex = 0;
+            } else if (index < 0) {
+                currentIndex = maxIndex;
+            } else {
+                currentIndex = index;
+            }
+
+            const offset = -currentIndex * slideWidthPercentage;
+            slides.style.transform = `translateX(${offset}%)`;
+        }
+
+        nextBtn.addEventListener('click', () => {
+            showSlide(currentIndex + 1);
+        });
+
+        prevBtn.addEventListener('click', () => {
+            showSlide(currentIndex - 1);
+        });
+
+        // Initialize first slide
+        showSlide(0);
+    }
+</script>
+
+<script>
+    // Scroll Animation Logic using Intersection Observer
+    document.addEventListener('DOMContentLoaded', () => {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                // When the element is in view, add the 'is-visible' class
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target); // Stop observing once animated
+                }
+            });
+        }, {
+            threshold: 0.1 // Animate when 10% of the element is visible
+        });
+
+        // Observe all elements with the 'fade-in-section' class
+        document.querySelectorAll('.fade-in-section').forEach(section => {
+            observer.observe(section);
+        });
+    });
+</script>
+
+{% block scripts %}{% endblock %}
+
+</body>
+</html>

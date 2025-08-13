@@ -1,0 +1,66 @@
+{% extends "auth_layout.html" %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+    <h2>Create an Account</h2>
+    <form id="registerForm">
+        <div class="form-group">
+            <label for="reg-name">Full Name</label>
+            <input type="text" id="reg-name" name="name" required>
+        </div>
+        <div class="form-group">
+            <label for="reg-email">Email</label>
+            <input type="email" id="reg-email" name="email" required>
+        </div>
+        <div class="form-group">
+            <label for="reg-password">Password</label>
+            <input type="password" id="reg-password" name="password" required>
+        </div>
+        <button type="submit">Register</button>
+    </form>
+    <div class="login-link">
+        <p>Already have an account? <a href="/">Login here</a></p>
+    </div>
+    <div id="message"></div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const registerForm = document.getElementById('registerForm');
+    const messageDiv = document.getElementById('message');
+
+    // Hide message when user starts typing
+    registerForm.addEventListener('input', () => { messageDiv.style.display = 'none'; });
+
+    registerForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const name = e.target.name.value;
+        const email = e.target.email.value;
+        const password = e.target.password.value;
+
+        const response = await fetch('/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, email, password })
+        });
+        const result = await response.json();
+        showMessage(result.message, result.success);
+
+        if (result.success && result.redirect_url) {
+            registerForm.reset();
+            // Redirect to the URL provided by the server after a short delay
+            setTimeout(() => { window.location.href = result.redirect_url; }, 2000);
+        }
+    });
+
+    function showMessage(message, isSuccess) {
+        messageDiv.textContent = message;
+        // Use classList for safer class manipulation
+        messageDiv.classList.remove('success', 'error');
+        messageDiv.classList.add(isSuccess ? 'success' : 'error');
+        // Explicitly show the message div
+        messageDiv.style.display = 'block';
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends "auth_layout.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+    <h2>Login to Your Account</h2>
+    <form id="loginForm">
+        <div class="form-group">
+            <label for="login-email">Email</label>
+            <input type="email" id="login-email" name="email" required>
+        </div>
+        <div class="form-group">
+            <label for="login-password">Password</label>
+            <input type="password" id="login-password" name="password" required>
+        </div>
+        <button type="submit">Login</button>
+    </form>
+    <div class="register-link">
+        <p>Don't have an account? <a href="/show_register">Register yourself</a></p>
+    </div>
+    <div id="message"></div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const loginForm = document.getElementById('loginForm');
+    const messageDiv = document.getElementById('message');
+
+    // Hide message when user starts typing
+    loginForm.addEventListener('input', () => { messageDiv.style.display = 'none'; });
+
+    loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = e.target.email.value;
+        const password = e.target.password.value;
+
+        const response = await fetch('/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
+        const result = await response.json();
+        
+        // If login was successful and the server sent a redirect URL, go there
+        if (result.success && result.redirect_url) {
+            window.location.href = result.redirect_url;
+        } else {
+            showMessage(result.message, result.success);
+        }
+    });
+
+    function showMessage(message, isSuccess) {
+        messageDiv.textContent = message;
+        // Use classList for safer class manipulation
+        messageDiv.classList.remove('success', 'error');
+        messageDiv.classList.add(isSuccess ? 'success' : 'error');
+        // Explicitly show the message div
+        messageDiv.style.display = 'block';
+    }
+</script>
+{% endblock %}

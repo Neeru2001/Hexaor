@@ -1,0 +1,1298 @@
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+}
+
+/* Styles for the centered authentication pages (login, register) */
+body.auth-layout {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f0f2f5;
+}
+
+.container {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+}
+
+h2 {
+    text-align: center;
+    color: #1c1e21;
+    margin-top: 0;
+}
+
+.form-group { margin-bottom: 1rem; }
+label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: #606770; }
+input, textarea {
+    width: 100%;
+    padding: 0.75rem;
+    box-sizing: border-box;
+    border: 1px solid #dddfe2;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-family: inherit; /* Make it use the body font */
+}
+textarea {
+    resize: vertical; /* Allow vertical resizing */
+}
+input:focus, textarea:focus { border-color: #1877f2; outline: none; box-shadow: 0 0 0 2px #e7f3ff; }
+button { width: 100%; padding: 0.75rem; background-color: #1877f2; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 1.1rem; font-weight: bold; }
+button:hover { background-color: #166fe5; }
+
+#message { margin-top: 1.5rem; text-align: center; padding: 0.75rem; border-radius: 6px; display: none; }
+.success { background-color: #e7f3ff; color: #1877f2; display: block; }
+.error { background-color: #fbe3e4; color: #dd2c3e; display: block; }
+
+.logo {
+    display: block;
+    margin: 0 auto 0.5rem auto;
+    width: 200px; /* Adjust size as needed */
+    height: auto;
+}
+
+.register-link, .login-link {
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.register-link a, .login-link a {
+    color: #1877f2;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+/* A reusable container for centered content */
+.content-container {
+    max-width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+/* Styles specific to the welcome page */
+.container.welcome {
+    text-align: center;
+    padding: 4rem;
+}
+
+.container.welcome h2 {
+    font-size: 2rem;
+}
+
+.container.welcome p {
+    color: #606770;
+    font-size: 1.1rem;
+}
+
+.container.welcome a {
+    display: inline-block;
+    margin-top: 1.5rem;
+    padding: 0.75rem 1.5rem;
+    background-color: #e4e6eb;
+    color: #1c1e21;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.container.welcome a:hover {
+    background-color: #d8dbdf;
+}
+
+/* --- New Layout for Logged-in Area --- */
+
+/* Reset body for pages with a header */
+body.app-layout {
+    display: block;
+    background-color: #ecf0f1; /* A slightly cooler grey background */
+}
+
+.site-header {
+    background-color: #2c3e50; /* Dark header background */
+    border-bottom: 1px solid #2c3e50;
+    padding: 0 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.site-header nav {
+    display: flex;
+    align-items: center;
+    max-width: 1100px;
+    margin: 0 auto;
+    height: 65px;
+}
+
+.logo-area {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.logo-area .logo {
+    width: 80px; /* Smaller logo for the header */
+    margin: 0;
+}
+
+.site-title {
+    color: white;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-left: 2rem; /* Increased space from logo */
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4); /* Subtle shadow for depth */
+    letter-spacing: 0.5px;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    align-items: center;
+    margin-left: auto; /* Pushes the entire nav block to the right */
+}
+
+.nav-links li a {
+    padding: 0 1rem;
+    text-decoration: none;
+    color: #ecf0f1; /* Light text for dark header */
+    font-weight: 600;
+    transition: color 0.2s ease-in-out;
+}
+
+.nav-links li a:hover {
+    color: #ffffff; /* Brighter on hover */
+}
+
+.nav-links li.active a {
+    color: #3498db; /* A vibrant blue for the active link */
+}
+
+.nav-links li.admin-link a {
+    color: #f1c40f; /* A distinct yellow/gold color for the admin link */
+}
+.nav-links li.admin-link a:hover {
+    color: #f39c12;
+}
+
+.nav-links .logout-link a {
+    background-color: #1877f2;
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.nav-links .logout-link a:hover {
+    background-color: #166fe5;
+}
+
+.nav-links .logout-link {
+    margin-right: 1rem; /* Add some space from the far right edge */
+}
+
+.main-content {
+    max-width: 1100px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.services-intro {
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 2.5rem;
+    color: #606770;
+    font-size: 1.1rem;
+}
+
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+}
+
+.service-card {
+    background-color: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 2rem;
+    text-align: center;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.service-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+}
+
+.service-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.service-card h3 {
+    margin-bottom: 0.5rem;
+}
+
+/* Remove container styles for the home page's main content block */
+.main-content.home-page-content {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    background-color: transparent;
+    box-shadow: none;
+}
+
+/* --- Footer --- */
+.site-footer-main {
+    background-color: #2c3e50; /* Same as header for consistency */
+    color: #bdc3c7; /* A lighter grey for text */
+    padding: 3rem 2rem 1rem 2rem;
+    margin-top: 3rem; /* Space above the footer */
+    border-top: 1px solid #34495e;
+}
+
+.footer-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #34495e; /* A subtle separator line */
+}
+
+.footer-column {
+    flex: 1;
+}
+
+.footer-column h4 {
+    color: #ffffff;
+    font-size: 1.1rem;
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+.footer-column ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-column ul li {
+    margin-bottom: 0.5rem;
+}
+
+.footer-column ul li a, .footer-column p {
+    color: #bdc3c7;
+    text-decoration: none;
+    transition: color 0.2s ease-in-out;
+    line-height: 1.6;
+}
+
+.footer-column ul li a:hover {
+    color: #ffffff;
+}
+
+.footer-bottom {
+    max-width: 1100px;
+    margin: 1rem auto 0 auto;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.footer-bottom p {
+    color: #7f8c8d;
+    margin: 0;
+}
+
+/* --- Home Page Hero --- */
+.hero-section {
+    position: relative;
+    height: calc(100vh - 65px); /* Full viewport height minus header height */
+    background-image: url('home_hero.jpg');
+    background-size: 115%; /* Start slightly zoomed in */
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    padding: 2rem;
+    transition: background-size 0.5s ease-in-out; /* Smooth transition for the zoom */
+}
+
+.hero-section:hover {
+    background-size: 100%; /* Zoom out to normal size on hover */
+}
+
+.hero-section::before { /* Overlay for text readability */
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.hero-content {
+    position: relative; /* To be on top of the overlay */
+    z-index: 1;
+}
+
+.hero-content h1 {
+    font-size: 2.8rem;
+    margin-bottom: 0.5rem;
+    color: white;
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    color: #f0f0f0;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.cta-button {
+    background-color: #3498db;
+    color: white;
+    padding: 0.8rem 1.8rem;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.cta-button:hover {
+    background-color: #2980b9;
+}
+
+.cta-button.secondary {
+    background-color: transparent;
+    color: #2c3e50;
+    border: 2px solid #bdc3c7;
+}
+
+.cta-button.secondary:hover {
+    background-color: #f9f9f9;
+    border-color: #2c3e50;
+}
+
+.services-section {
+    /* Make this a full-width section */
+    background-color: #ffffff;
+    padding: 4rem 0;
+    text-align: center;
+}
+
+/* --- Why Choose Us Section --- */
+.why-choose-us-section {
+    padding: 4rem 0;
+    background-color: #f9f9f9; /* A slightly different background to break up the page */
+    text-align: center;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-top: 2.5rem;
+}
+
+.feature-card {
+    text-align: center;
+}
+
+.feature-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.feature-card h3 {
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+}
+
+/* --- Testimonials Section --- */
+.testimonials-section {
+    padding: 4rem 0;
+    background-color: #ffffff;
+    text-align: center;
+}
+
+.testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2.5rem;
+}
+
+.testimonial-card {
+    background-color: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 2rem;
+}
+
+/* Make this selector more specific to prevent leaks */
+.testimonials-section .testimonial-card blockquote,
+.testimonials-page-grid .testimonial-card blockquote {
+    margin: 0 0 1rem 0;
+    font-style: italic;
+    color: #333;
+    border-left: 4px solid #3498db;
+    padding-left: 1rem;
+    text-align: left;
+}
+
+.testimonial-card cite {
+    display: block;
+    text-align: right;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.more-testimonials-link {
+    margin-top: 2.5rem;
+    text-align: right;
+}
+
+.more-testimonials-link a {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: color 0.2s ease-in-out;
+}
+
+.more-testimonials-link a:hover {
+    color: #2980b9;
+    text-decoration: underline;
+}
+
+/* --- Scroll to Top Button --- */
+.scroll-to-top-btn {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    /* Use flexbox for perfect centering */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+}
+
+.scroll-to-top-btn.show {
+    opacity: 0.8;
+    visibility: visible;
+}
+
+.scroll-to-top-btn:hover {
+    opacity: 1;
+}
+
+/* --- Gallery Slider Section --- */
+.gallery-section {
+    padding: 4rem 0;
+    background-color: #2c3e50; /* Dark background to match header/footer */
+    text-align: center;
+}
+
+.gallery-section h2 {
+    color: #ffffff; /* Light text for dark background */
+    margin-bottom: 2.5rem;
+}
+
+.slider-container {
+    position: relative;
+    overflow: hidden;
+    padding: 0 1rem; /* Add horizontal padding for edge spacing */
+    box-sizing: border-box; /* Ensures padding is included within the element's width */
+}
+
+.slides {
+    display: flex;
+    transition: transform 0.4s ease-in-out;
+}
+
+.slide {
+    flex: 0 0 25%; /* Show 4 slides at a time */
+    height: 350px; /* A more appropriate height for smaller images */
+    background-image: var(--bg-image);
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.3s ease-in-out;
+    box-sizing: border-box; /* Include border in the element's total width and height */
+    border: 6px solid #2c3e50; /* Use a border with the section's background color to create a gap */
+}
+
+.slide:hover {
+    transform: scale(1.05);
+    z-index: 10;
+}
+
+.slider-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(255, 255, 255, 0.8);
+    color: white;
+    border: none;
+    padding: 0.8rem;
+    cursor: pointer;
+    font-size: 1.5rem;
+    font-weight: bold;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    line-height: 1;
+    transition: background-color 0.2s ease-in-out;
+    color: #2c3e50;
+    z-index: 20;
+}
+
+.slider-btn:hover {
+    background-color: white;
+}
+
+.prev-btn { left: 15px; }
+.next-btn { right: 15px; }
+
+/* --- Admin Layout Styles --- */
+
+body.admin-layout {
+    display: flex;
+    background-color: #f4f6f9;
+    min-height: 100vh;
+}
+
+.admin-sidebar {
+    width: 250px;
+    background-color: #34495e;
+    color: #ecf0f1;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    height: 100%;
+}
+
+.admin-sidebar-header {
+    padding: 1.5rem;
+    text-align: center;
+    border-bottom: 1px solid #46627f;
+}
+
+.admin-sidebar-header h3 {
+    margin: 0;
+    color: #ffffff;
+}
+
+.admin-nav {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+    flex-grow: 1;
+}
+
+.admin-nav li a {
+    display: block;
+    padding: 1rem 1.5rem;
+    color: #ecf0f1;
+    text-decoration: none;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.admin-nav li a:hover {
+    background-color: #46627f;
+    color: #ffffff;
+}
+
+.admin-nav li.active a {
+    background-color: #3498db;
+    color: #ffffff;
+}
+
+.admin-sidebar-footer {
+    padding: 1.5rem;
+    border-top: 1px solid #46627f;
+}
+
+.back-to-site {
+    color: #bdc3c7;
+    text-decoration: none;
+    display: block;
+    text-align: center;
+}
+.back-to-site:hover {
+    color: #ffffff;
+}
+
+.admin-main-content {
+    margin-left: 250px; /* Same as sidebar width */
+    flex-grow: 1;
+    padding: 2rem;
+}
+
+.admin-header {
+    background-color: #ffffff;
+    padding: 1.5rem 2rem;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+}
+
+.admin-header h2 {
+    margin: 0;
+    color: #2c3e50;
+}
+
+/* Admin Dashboard Stats */
+.admin-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+}
+
+.stat-card {
+    background-color: #ffffff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.stat-card h4 {
+    margin: 0 0 0.5rem 0;
+    color: #7f8c8d;
+    font-size: 1rem;
+}
+
+.stat-card .stat-number {
+    margin: 0;
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.stat-card.error-card .stat-number {
+    color: #e74c3c;
+}
+
+.admin-welcome {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background-color: #ffffff;
+    border-radius: 8px;
+}
+
+/* Admin Log Viewer */
+.log-table-container {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    overflow-x: auto;
+}
+
+.log-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.log-table th, .log-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+.log-table th {
+    background-color: #f9fafb;
+    font-weight: 600;
+    color: #606770;
+}
+
+.log-level-badge {
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.log-level-info .log-level-badge { background-color: #3498db; }
+.log-level-warning .log-level-badge { background-color: #f1c40f; }
+.log-level-error .log-level-badge { background-color: #e74c3c; }
+
+.pagination {
+    margin-top: 1.5rem;
+    text-align: center;
+}
+
+.pagination a {
+    margin: 0 0.5rem;
+    text-decoration: none;
+    color: #3498db;
+}
+
+.pagination span {
+    margin: 0 1rem;
+    color: #7f8c8d;
+}
+
+/* Admin Forms (for edit user page) */
+.form-container-admin {
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    max-width: 700px;
+}
+
+.form-group-checkbox {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.form-group-checkbox input[type="checkbox"] {
+    width: auto;
+    margin-right: 0.75rem;
+    height: 18px;
+    width: 18px;
+}
+
+.form-group-checkbox label {
+    margin-bottom: 0;
+    font-weight: normal;
+}
+
+.form-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.form-actions .cta-button {
+    width: auto;
+    padding: 0.7rem 1.5rem;
+}
+
+.cancel-link {
+    color: #7f8c8d;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.cancel-link:hover {
+    color: #2c3e50;
+}
+
+/* Admin table action buttons */
+.log-table .cta-button {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.log-table .cta-button.edit-button {
+    background-color: #f39c12; /* Orange for edit */
+    margin-left: 0.5rem;
+}
+
+/* --- Admin Flashed Messages --- */
+.admin-flash {
+    margin-bottom: 1.5rem;
+}
+
+/* --- Admin Appointments Page --- */
+.status-badge {
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px;
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: bold;
+    text-transform: capitalize;
+}
+
+.status-badge.status-pending { background-color: #f39c12; }
+.status-badge.status-confirmed { background-color: #2ecc71; }
+.status-badge.status-completed { background-color: #3498db; }
+.status-badge.status-cancelled { background-color: #e74c3c; }
+
+.appointment-update-form .form-group-inline {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.appointment-update-form input[type="date"],
+.appointment-update-form select {
+    padding: 0.4rem 0.6rem;
+    border-radius: 4px;
+    border: 1px solid #dddfe2;
+    background-color: #f9fafb;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.appointment-update-form input[type="date"]:focus,
+.appointment-update-form select:focus {
+    outline: none;
+    border-color: #3498db;
+}
+
+.cta-button-small {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.9rem;
+    background-color: #2ecc71;
+    border: none;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.cta-button-small:hover {
+    background-color: #27ae60;
+}
+
+/* --- Form Validation Styles --- */
+.is-invalid {
+    border-color: #dd2c3e !important; /* Use important to override focus styles */
+}
+
+.invalid-feedback {
+    color: #dd2c3e;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-top: 0.25rem;
+}
+
+/* --- Profile Page --- */
+.profile-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr; /* 1/3 for profile, 2/3 for history */
+    gap: 2rem;
+}
+
+.profile-details-card, .appointment-history-card {
+    background-color: #f9f9f9;
+    padding: 2rem;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+.profile-details-card h2, .appointment-history-card h2 {
+    margin-top: 0;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+/* --- Detailed Services Page --- */
+.detailed-services-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.detailed-service-card {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+    background-color: #f9f9f9;
+    padding: 2rem;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+.detailed-service-icon {
+    font-size: 3rem;
+    background-color: #e7f3ff;
+    color: #1877f2;
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.detailed-service-content h3 {
+    margin-top: 0;
+}
+
+.detailed-service-content ul {
+    padding-left: 20px;
+    margin-top: 1rem;
+}
+
+.more-services-note {
+    text-align: center;
+    margin-top: 3rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #606770;
+}
+
+/* --- FAQ Page --- */
+.faq-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.faq-item {
+    border-bottom: 1px solid #e0e0e0;
+    padding: 1rem 0;
+}
+
+.faq-item summary {
+    font-weight: 600;
+    cursor: pointer;
+    list-style: none; /* Remove default marker */
+    position: relative;
+    padding-right: 2rem; /* Space for the custom marker */
+}
+
+.faq-item summary::-webkit-details-marker {
+    display: none; /* Hide default marker for Chrome/Safari */
+}
+
+.faq-item summary::after {
+    content: '+';
+    position: absolute;
+    right: 0;
+    font-size: 1.5rem;
+    color: #3498db;
+    transition: transform 0.2s ease-in-out;
+}
+
+.faq-item[open] summary::after {
+    transform: rotate(45deg);
+}
+
+.faq-item p {
+    margin-top: 1rem;
+    padding-left: 1rem;
+    line-height: 1.6;
+    color: #606770;
+}
+
+/* --- Testimonials Page --- */
+.testimonials-page-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+.detail-item:last-child {
+    border-bottom: none;
+}
+
+.detail-item strong {
+    color: #606770;
+}
+
+.appointments-list {
+    max-height: 600px; /* Add a scrollbar if the list is long */
+    overflow-y: auto;
+    padding-right: 1rem; /* Space for the scrollbar */
+}
+
+.appointment-item {
+    background-color: #ffffff;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    border-left: 5px solid #3498db; /* Default color */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.appointment-item.status-pending { border-left-color: #f39c12; }
+.appointment-item.status-confirmed { border-left-color: #2ecc71; }
+.appointment-item.status-completed { border-left-color: #3498db; }
+.appointment-item.status-cancelled { border-left-color: #e74c3c; }
+
+.appointment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background-color: #f9fafb;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+.appointment-vehicle {
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.appointment-body {
+    padding: 1rem;
+}
+
+.appointment-body p {
+    margin: 0 0 0.5rem 0;
+    color: #606770;
+}
+
+.appointment-body p:last-child {
+    margin-bottom: 0;
+}
+
+.no-appointments {
+    text-align: center;
+    padding: 3rem 1rem;
+}
+
+.no-appointments p {
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+    color: #7f8c8d;
+}
+
+/* Responsive adjustments for profile page */
+@media (max-width: 900px) {
+    .profile-grid {
+        grid-template-columns: 1fr; /* Stack columns on smaller screens */
+    }
+}
+
+/* --- Profile Page Enhancements --- */
+.profile-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.profile-form .cta-button {
+    width: auto;
+    padding: 0.7rem 1.5rem;
+}
+
+.readonly-field {
+    background-color: #ecf0f1;
+    color: #7f8c8d;
+    cursor: not-allowed;
+}
+
+.password-change-card {
+    background-color: #f9f9f9;
+    padding: 2rem;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    margin-top: 2rem;
+}
+
+.password-change-card h2 {
+    margin-top: 0;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+/* --- Responsive Design --- */
+
+.menu-toggle {
+    display: none; /* Hidden by default on desktop */
+    z-index: 101;
+}
+
+/* --- Tablet (and smaller) Styles --- */
+@media (max-width: 992px) {
+    .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .features-grid {
+        grid-template-columns: 1fr;
+        max-width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .testimonials-page-grid {
+        grid-template-columns: 1fr;
+        max-width: 500px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .profile-grid {
+        grid-template-columns: 1fr;
+    }
+    .slide {
+        flex: 0 0 50%; /* Show 2 slides */
+    }
+    .footer-container {
+        grid-template-columns: 1fr 1fr;
+    }
+    .detailed-service-card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+}
+
+/* --- Mobile Phone Styles --- */
+@media (max-width: 768px) {
+    /* This hyper-specific rule prevents any other style from adding a border to the main navigation. */
+    body.app-layout > header.site-header > nav > ul.nav-links {
+        border-left: none !important;
+    }
+
+    .menu-toggle {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        width: 30px;
+        height: 25px;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        z-index: 101;
+        margin-left: auto;
+    }
+    .menu-toggle span {
+        width: 100%;
+        height: 3px;
+        background-color: white;
+        border-radius: 10px;
+        transition: all 0.3s linear;
+        position: relative;
+        transform-origin: 1px;
+    }
+    /* Animate hamburger to an 'X' */
+    .menu-toggle[aria-expanded="true"] span:nth-child(1) {
+        transform: rotate(45deg) translate(2px, -1px);
+    }
+    .menu-toggle[aria-expanded="true"] span:nth-child(2) {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    .menu-toggle[aria-expanded="true"] span:nth-child(3) {
+        transform: rotate(-45deg) translate(1px, 0px);
+    }
+
+    .nav-links {
+        position: absolute;
+        top: 65px;
+        left: 0;
+        width: 100%;
+        flex-direction: column;
+        background-color: #34495e;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-out;
+    }
+    .nav-links.nav-active {
+        max-height: 500px; /* Adjust as needed */
+    }
+    .nav-links li {
+        width: 100%;
+        text-align: center;
+    }
+    .nav-links li a {
+        padding: 1.5rem 1rem;
+        display: block;
+        width: 100%;
+    }
+    .nav-links .logout-link {
+        margin: 1rem 0;
+    }
+    .nav-links .logout-link a {
+        display: inline-block;
+        width: auto;
+    }
+    .hero-content h1 {
+        font-size: 2.2rem;
+    }
+    .hero-content p {
+        font-size: 1.1rem;
+    }
+    .services-grid, .testimonials-grid {
+        grid-template-columns: 1fr;
+    }
+    .footer-container {
+        flex-direction: column;
+        text-align: center;
+    }
+    .slide {
+        flex: 0 0 100%; /* Show 1 slide */
+    }
+    .admin-menu-toggle {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        width: 25px;
+        height: 20px;
+        background: #34495e;
+        border: none;
+        cursor: pointer;
+        padding: 0.5rem;
+        border-radius: 4px;
+        position: fixed;
+        top: 15px;
+        left: 15px;
+        z-index: 101;
+    }
+    .admin-menu-toggle span {
+        width: 100%;
+        height: 2px;
+        background-color: white;
+        border-radius: 10px;
+    }
+    .admin-sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease-in-out;
+        z-index: 100;
+    }
+    body[data-sidebar-hidden="false"] .admin-sidebar {
+        transform: translateX(0);
+    }
+    .admin-main-content {
+        margin-left: 0;
+        padding: 1rem;
+        padding-top: 5rem; /* Space for the toggle button */
+    }
+    .admin-header {
+        padding: 1rem;
+    }
+    .admin-stats-grid {
+        grid-template-columns: 1fr;
+    }
+    .appointment-update-form .form-group-inline {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}

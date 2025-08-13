@@ -1,0 +1,46 @@
+{% extends "admin/admin_layout.html" %}
+
+{% block title %}Manage Users{% endblock %}
+{% block page_title %}User Management{% endblock %}
+
+{% block content %}
+<div class="log-table-container">
+    <table class="log-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Admin?</th>
+                <th>Registered On</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.email }}</td>
+                <td>
+                    {% if user.is_admin %}
+                        <span class="log-level-badge" style="background-color: #2ecc71;">Yes</span>
+                    {% else %}
+                        <span class="log-level-badge" style="background-color: #95a5a6;">No</span>
+                    {% endif %}
+                </td>
+                <td>{{ user.created_at.strftime('%Y-%m-%d') }}</td>
+                <td>
+                    <a href="{{ url_for('admin_view_user', user_id=user.id) }}" class="cta-button">View</a>
+                    <a href="{{ url_for('admin_edit_user', user_id=user.id) }}" class="cta-button edit-button">Edit</a>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6">No users found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

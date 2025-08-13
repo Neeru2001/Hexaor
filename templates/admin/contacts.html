@@ -1,0 +1,37 @@
+{% extends "admin/admin_layout.html" %}
+
+{% block title %}Contact Enquiries{% endblock %}
+{% block page_title %}Contact Form Enquiries{% endblock %}
+
+{% block content %}
+<div class="log-table-container">
+    <table class="log-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Submitted At</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Message</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for contact in contacts %}
+            <tr>
+                <td>{{ contact.id }}</td>
+                <td>{{ contact.submitted_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                <td>{{ contact.name }}</td>
+                <td>{{ contact.email }}</td>
+                <td>{{ contact.phone_number or 'N/A' }}</td>
+                <td>{{ contact.message }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6">No contact enquiries found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+
+{% block title %}FAQ{% endblock %}
+
+{% block content %}
+    <h1>Frequently Asked Questions</h1>
+    <p>Have a question? We've compiled a list of our most common customer questions below. If you don't find your answer here, feel free to contact us.</p>
+    <hr>
+
+    <div class="faq-container">
+        <details class="faq-item">
+            <summary>How often should I get an oil change?</summary>
+            <p>Most modern vehicles recommend an oil change every 5,000 to 7,500 miles. However, this can vary based on your car's make, model, and your driving habits. We recommend checking your owner's manual or consulting with one of our technicians for a personalized recommendation.</p>
+        </details>
+
+        <details class="faq-item">
+            <summary>Do I need an appointment for a service?</summary>
+            <p>While we do accept walk-ins for minor services like tire pressure checks, we highly recommend booking an appointment for all other services. This ensures we can dedicate the necessary time and resources to your vehicle and minimize your wait time.</p>
+        </details>
+
+        <details class="faq-item">
+            <summary>What kind of warranty do you offer on repairs?</summary>
+            <p>We stand by our work. We offer a 24-month / 24,000-mile warranty on most parts and labor for repairs we perform. Please ask your service advisor for specific warranty details related to your service.</p>
+        </details>
+
+        <details class="faq-item">
+            <summary>My "Check Engine" light is on. What should I do?</summary>
+            <p>A check engine light can indicate anything from a loose gas cap to a serious engine issue. While it's not always an emergency, it's best to have it checked as soon as possible to prevent potential damage. Our technicians can run a diagnostic test to determine the cause.</p>
+        </details>
+
+        <details class="faq-item">
+            <summary>How long will the repair take?</summary>
+            <p>Repair times vary greatly depending on the complexity of the job and parts availability. We will provide you with an estimated completion time when you drop off your vehicle and will keep you updated on our progress.</p>
+        </details>
+
+        <details class="faq-item">
+            <summary>Can I provide my own parts?</summary>
+            <p>For liability and warranty reasons, we typically do not install customer-provided parts. We use high-quality parts from trusted suppliers that allow us to stand behind our work with a comprehensive warranty. This ensures the quality and longevity of your repair.</p>
+        </details>
+
+        <details class="faq-item">
+            <summary>What payment methods do you accept?</summary>
+            <p>We accept all major credit cards (Visa, MasterCard, American Express, Discover), debit cards, and cash. We do not accept personal checks at this time.</p>
+        </details>
+    </div>
+{% endblock %}

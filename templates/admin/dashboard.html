@@ -1,0 +1,28 @@
+{% extends "admin/admin_layout.html" %}
+
+{% block title %}Dashboard{% endblock %}
+{% block page_title %}Site Dashboard{% endblock %}
+
+{% block content %}
+<div class="admin-stats-grid">
+    <div class="stat-card">
+        <h4>New Users (Last 7 Days)</h4>
+        <p class="stat-number">{{ stats.new_users_week }}</p>
+    </div>
+    <div class="stat-card">
+        <h4>Total Contact Messages</h4>
+        <p class="stat-number">{{ stats.total_contacts }}</p>
+    </div>
+    <div class="stat-card">
+        <h4>Total Log Entries</h4>
+        <p class="stat-number">{{ stats.total_logs }}</p>
+    </div>
+    <div class="stat-card error-card">
+        <h4>Errors Logged Today</h4>
+        <p class="stat-number">{{ stats.errors_today }}</p>
+    </div>
+</div>
+
+<p class="admin-welcome">Welcome to the admin dashboard. From here you can monitor site activity and manage content.</p>
+
+{% endblock %}

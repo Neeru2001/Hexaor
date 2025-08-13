@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin{% endblock %} - Vehicle Help</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="admin-layout" data-sidebar-hidden="true">
+    <div class="admin-sidebar">
+        <div class="admin-sidebar-header">
+            <h3>Admin Panel</h3>
+        </div>
+        <ul class="admin-nav">
+            <li class="{{ 'active' if request.endpoint == 'admin_dashboard' else '' }}">
+                <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+            </li>
+            <li class="{{ 'active' if request.endpoint == 'admin_logs' else '' }}">
+                <a href="{{ url_for('admin_logs') }}">View Logs</a>
+            </li>
+            <li class="{{ 'active' if request.endpoint in ['admin_users', 'admin_edit_user'] else '' }}">
+                <a href="{{ url_for('admin_users') }}">Manage Users</a>
+            </li>
+            <li class="{{ 'active' if request.endpoint == 'admin_contacts' else '' }}">
+                <a href="{{ url_for('admin_contacts') }}">Contact Enquiries</a>
+            </li>
+            <li class="{{ 'active' if request.endpoint == 'admin_appointments' else '' }}">
+                <a href="{{ url_for('admin_appointments') }}">Manage Appointments</a>
+            </li>
+            <li class="{{ 'active' if request.endpoint == 'admin_subscribers' else '' }}">
+                <a href="{{ url_for('admin_subscribers') }}">Subscribers</a>
+            </li>
+        </ul>
+        <div class="admin-sidebar-footer">
+            <a href="{{ url_for('welcome') }}" class="back-to-site">← Back to Main Site</a>
+        </div>
+    </div>
+    <div class="admin-main-content">
+        <button class="admin-menu-toggle" aria-label="Toggle Admin Menu">
+            <span></span><span></span><span></span>
+        </button>
+        <header class="admin-header">
+            <h2>{% block page_title %}{% endblock %}</h2>
+        </header>
+        {# Display flashed messages for admin pages #}
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }} admin-flash">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </div>
+    <script>
+        const adminMenuToggle = document.querySelector('.admin-menu-toggle');
+        const body = document.querySelector('body');
+        adminMenuToggle.addEventListener('click', () => {
+            body.dataset.sidebarHidden = body.dataset.sidebarHidden === 'false' ? 'true' : 'false';
+        });
+    </script>
+</body>
+</html>

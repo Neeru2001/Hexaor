@@ -1,0 +1,50 @@
+{% extends "admin/admin_layout.html" %}
+
+{% block title %}Site Logs{% endblock %}
+{% block page_title %}Site Activity Logs{% endblock %}
+
+{% block content %}
+<div class="log-table-container">
+    <table class="log-table">
+        <thead>
+            <tr>
+                <th>Timestamp</th>
+                <th>Level</th>
+                <th>User</th>
+                <th>IP Address</th>
+                <th>Endpoint</th>
+                <th>Message</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for log in logs %}
+            <tr class="log-level-{{ log.level.lower() }}">
+                <td>{{ log.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                <td><span class="log-level-badge">{{ log.level }}</span></td>
+                <td>{{ log.user_email or 'Guest' }}</td>
+                <td>{{ log.ip_address }}</td>
+                <td>{{ log.endpoint }}</td>
+                <td>{{ log.message }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6">No logs found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="pagination">
+    {% set total_pages = (total_logs / per_page)|round(0, 'ceil')|int %}
+    {% if page > 1 %}
+        <a href="{{ url_for('admin_logs', page=page-1) }}">&laquo; Previous</a>
+    {% endif %}
+
+    <span>Page {{ page }} of {{ total_pages }}</span>
+
+    {% if page < total_pages %}
+        <a href="{{ url_for('admin_logs', page=page+1) }}">Next &raquo;</a>
+    {% endif %}
+</div>
+{% endblock %}
