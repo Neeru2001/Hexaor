@@ -7,6 +7,7 @@ import re, datetime
 from werkzeug.exceptions import HTTPException
 import os, sys
 from dotenv import load_dotenv
+from db_config import db_config # Import the config dictionary
 
 # Load environment variables from .env file for local development
 load_dotenv()
@@ -21,10 +22,7 @@ try:
     db_pool = mysql.connector.pooling.MySQLConnectionPool(
         pool_name="web_app_pool",
         pool_size=5,
-        host=os.environ.get('DB_HOST'),
-        user=os.environ.get('DB_USER'),
-        password=os.environ.get('DB_PASSWORD'),
-        database=os.environ.get('DB_NAME')
+        **db_config
     )
     print("Database connection pool created successfully.")
 except mysql.connector.Error as err:
