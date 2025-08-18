@@ -3,7 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}My App{% endblock %}</title>
+    <!-- This is the link to your favicon -->
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="{% block meta_description %}Your default description for Hexaor vehicle repair services.{% endblock %}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <!-- End SEO Meta Tags -->
+    <title>{% block title %}Hexaor - Vehicle Repair & Maintenance{% endblock %}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@700&display=swap" rel="stylesheet">
