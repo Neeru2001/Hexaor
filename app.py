@@ -205,6 +205,60 @@ def logout():
     session.clear()
     return redirect(url_for('index'))
 
+@app.route('/forgot_password', methods=['GET', 'POST'])
+def forgot_password():
+    if request.method == 'POST':
+        email = request.get_json().get('email')
+        try:
+            conn = db_pool.get_connection()
+            cursor = conn.cursor(dictionary=True)
+            cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
+            user = cursor.fetchone()
+            if user:
+                token = secrets.token_urlsafe(32)
+                expires_at = datetime.datetime.utcnow() + datetime.timedelta(hours=1)
+                cursor.execute("INSERT INTO password_reset_tokens (user_id, token, expires_at) VALUES (%s, %s, %s)", (user['id'], token, expires_at))
+                conn.commit()
+                # In a real application, you would send an email with the reset link
+                print(f"Password reset link for {email}: {url_for('reset_password', token=token, _external=True)}")
+                return jsonify({'success': True, 'message': 'Please contact admin to reset your password over phone: +1234567890.'})
+            else:
+                return jsonify({'success': False, 'message': 'Email not found.'})
+        except mysql.connector.Error as err:
+            print(f"Database Error on forgot password: {err}")
+            return jsonify({'success': False, 'message': 'A server error occurred.'})
+        finally:
+            if 'conn' in locals() and conn.is_connected():
+                cursor.close()
+                conn.close()
+    return render_template('forgot_password.html')
+
+@app.route('/reset_password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    if request.method == 'POST':
+        new_password = request.get_json().get('new_password')
+        try:
+            conn = db_pool.get_connection()
+            cursor = conn.cursor(dictionary=True)
+            cursor.execute("SELECT * FROM password_reset_tokens WHERE token = %s AND expires_at > UTC_TIMESTAMP()", (token,))
+            token_data = cursor.fetchone()
+            if token_data:
+                hashed_password = generate_password_hash(new_password)
+                cursor.execute("UPDATE users SET password = %s WHERE id = %s", (hashed_password, token_data['user_id']))
+                cursor.execute("DELETE FROM password_reset_tokens WHERE token = %s", (token,))
+                conn.commit()
+                return jsonify({'success': True, 'message': 'Password has been reset successfully.'})
+            else:
+                return jsonify({'success': False, 'message': 'Invalid or expired token.'})
+        except mysql.connector.Error as err:
+            print(f"Database Error on reset password: {err}")
+            return jsonify({'success': False, 'message': 'A server error occurred.'})
+        finally:
+            if 'conn' in locals() and conn.is_connected():
+                cursor.close()
+                conn.close()
+    return render_template('reset_password.html', token=token)
+
 # --- Content Routes (Placeholders) ---
 
 @app.route('/welcome')
@@ -652,20 +706,45 @@ def admin_edit_user(user_id):
     if request.method == 'POST':
         name = request.form.get('name')
         email = request.form.get('email')
-        # A more pythonic way to check for a checkbox's existence
         is_admin = 'is_admin' in request.form
+        new_password = request.form.get('new_password')
+        confirm_password = request.form.get('confirm_password')
 
         try:
             conn = db_pool.get_connection()
             cursor = conn.cursor()
+
+            # Password update logic
+            if new_password:
+                if new_password != confirm_password:
+                    flash("New passwords do not match.", "error")
+                    # It's important to refetch the user data to render the page again
+                    cursor.close()
+                    conn.close()
+                    return redirect(url_for('admin_edit_user', user_id=user_id))
+
+                if len(new_password) < 8:
+                    flash("New password must be at least 8 characters long.", "error")
+                    cursor.close()
+                    conn.close()
+                    return redirect(url_for('admin_edit_user', user_id=user_id))
+                
+                hashed_password = generate_password_hash(new_password)
+                cursor.execute("UPDATE users SET password = %s WHERE id = %s", (hashed_password, user_id))
+                log_event('INFO', f"Admin changed password for user ID {user_id}.")
+
+            # Update other user details
             cursor.execute(
                 "UPDATE users SET name = %s, email = %s, is_admin = %s WHERE id = %s",
                 (name, email, is_admin, user_id)
             )
             conn.commit()
             log_event('INFO', f"Admin updated user ID {user_id}.")
+            flash("User details updated successfully.", "success")
+
         except mysql.connector.Error as err:
             print(f"Database error updating user {user_id}: {err}")
+            flash("A database error occurred.", "error")
         finally:
             if 'conn' in locals() and conn.is_connected():
                 cursor.close()
