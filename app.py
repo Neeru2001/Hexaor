@@ -36,6 +36,7 @@ except mysql.connector.Error as err:
     sys.exit(1) # Exit if the database connection fails on startup.
 
 # --- Central Logging Function ---
+
 def log_event(level, message, endpoint=None, method=None, user_id=None, ip_address=None):
     """A central function to log events to the database."""
     try:
