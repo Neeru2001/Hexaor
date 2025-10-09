@@ -4,6 +4,7 @@ from mysql.connector import pooling
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 import re, datetime
+import secrets
 from werkzeug.exceptions import HTTPException
 import os, sys
 from dotenv import load_dotenv
@@ -17,6 +18,17 @@ load_dotenv(dotenv_path='.env')
 app = Flask(__name__)
 # A secret key is required for session management. Load from environment variable.
 app.secret_key = os.environ.get('FLASK_SECRET_KEY')
+
+# --- Flask-Mail Configuration ---
+app.config['MAIL_SERVER'] = os.environ.get('MAIL_SERVER', 'smtp.gmail.com')
+app.config['MAIL_PORT'] = int(os.environ.get('MAIL_PORT', 587))
+app.config['MAIL_USE_TLS'] = os.environ.get('MAIL_USE_TLS', 'true').lower() in ['true', '1', 'yes']
+app.config['MAIL_USE_SSL'] = os.environ.get('MAIL_USE_SSL', 'false').lower() in ['true', '1', 'yes']
+app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME')
+app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
+app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('MAIL_DEFAULT_SENDER', app.config['MAIL_USERNAME'])
+
+mail = Mail(app)
 
 # --- Database Connection Pool ---
 # A connection pool is more efficient for web apps than creating new connections for every request.
