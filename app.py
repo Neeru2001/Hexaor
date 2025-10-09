@@ -4,6 +4,7 @@ from mysql.connector import pooling
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 import re, datetime
+import secrets
 from werkzeug.exceptions import HTTPException
 import os, sys
 from dotenv import load_dotenv
