@@ -7,7 +7,8 @@ import re, datetime
 from werkzeug.exceptions import HTTPException
 import os, sys
 from dotenv import load_dotenv
-
+from db_config import db_config
+from flask_mail import Mail, Message
 # Load environment variables from .env file for local development
 # load_dotenv()
 from dotenv import load_dotenv
@@ -37,6 +38,8 @@ except mysql.connector.Error as err:
     print("CRITICAL: Could not connect to the database. Please check your .env configuration and ensure the database server is running.")
     sys.exit(1) # Exit if the database connection fails on startup.
 
+# --- Central Logging Function ---
+    
 def log_event(level, message, endpoint=None, method=None, user_id=None, ip_address=None):
     """A central function to log events to the database."""
     try:
@@ -146,7 +149,7 @@ def register():
         log_event('INFO', f"New user registered: '{email}'.")
         return jsonify({
             'success': True,
-            'message': 'Registration successful! Redirecting to login...',
+            'message': 'Registration successful! Redirecting to login...', 
             'redirect_url': url_for('index')
         })
     except mysql.connector.Error as err:
@@ -220,9 +223,19 @@ def forgot_password():
                 expires_at = datetime.datetime.utcnow() + datetime.timedelta(hours=1)
                 cursor.execute("INSERT INTO password_reset_tokens (user_id, token, expires_at) VALUES (%s, %s, %s)", (user['id'], token, expires_at))
                 conn.commit()
-                # In a real application, you would send an email with the reset link
-                print(f"Password reset link for {email}: {url_for('reset_password', token=token, _external=True)}")
-                return jsonify({'success': True, 'message': 'Please contact admin to reset your password over phone: +1234567890.'})
+                # Send email with reset link
+                try:
+                    msg = Message("Password Reset Request",
+                                  sender=app.config['MAIL_USERNAME'],
+                                  recipients=[email])
+                    reset_url = url_for('reset_password', token=token, _external=True)
+                    msg.body = f"To reset your password, visit the following link: {reset_url}\n\nIf you did not make this request then simply ignore this email."
+                    mail.send(msg)
+                    log_event('INFO', f"Password reset email sent to {email}.")
+                    return jsonify({'success': True, 'message': 'A password reset link has been sent to your email address.'})
+                except Exception as mail_err:
+                    log_event('ERROR', f"Failed to send password reset email to {email}: {mail_err}")
+                    return jsonify({'success': False, 'message': 'Failed to send reset email. Please try again later.'})
             else:
                 return jsonify({'success': False, 'message': 'Email not found.'})
         except mysql.connector.Error as err:
@@ -720,14 +733,10 @@ def admin_edit_user(user_id):
                 if new_password != confirm_password:
                     flash("New passwords do not match.", "error")
                     # It's important to refetch the user data to render the page again
-                    cursor.close()
-                    conn.close()
                     return redirect(url_for('admin_edit_user', user_id=user_id))
 
                 if len(new_password) < 8:
                     flash("New password must be at least 8 characters long.", "error")
-                    cursor.close()
-                    conn.close()
                     return redirect(url_for('admin_edit_user', user_id=user_id))
                 
                 hashed_password = generate_password_hash(new_password)
