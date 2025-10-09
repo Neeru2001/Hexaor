@@ -7,7 +7,7 @@ import re, datetime
 from werkzeug.exceptions import HTTPException
 import os, sys
 from dotenv import load_dotenv
-
+from flask_mail import Mail, Message
 # Load environment variables from .env file for local development
 # load_dotenv()
 from dotenv import load_dotenv
